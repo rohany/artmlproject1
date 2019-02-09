@@ -1,3 +1,4 @@
+from __future__ import print_function
 import scipy.io
 import scipy.misc
 import tensorflow as tf
@@ -5,7 +6,6 @@ import numpy as np
 import time
 from IPython.display import Image
 
-from __future__ import print_function
 from keras.preprocessing.image import load_img, img_to_array
 from scipy.misc import imsave #to be able to save as an image
 from scipy.optimize import fmin_l_bfgs_b #to optimize our cost function
@@ -14,11 +14,8 @@ from keras.applications import vgg19 #to load vgg19 network
 from keras import backend as K
 
 import keras
-print(tf.__version__)
-print(keras.__version__)
 
 from keras.utils.vis_utils import plot_model #to be able to visualize the network
-get_ipython().run_line_magic('matplotlib', 'inline')
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 
@@ -35,8 +32,8 @@ content_weight = 0.025 #the best number authors got from their trials
 
 # let's load images
 
-base_image_path = './images/'+content_file_name
-style_reference_image_path = './images/'+style_file_name
+base_image_path = './test-images/'+content_file_name
+style_reference_image_path = './test-images/'+style_file_name
 
 # get dimensions (width, height) of the generated picture
 width, height = load_img(base_image_path).size
@@ -110,14 +107,14 @@ input_tensor = K.concatenate([base_image,
 model = vgg19.VGG19(input_tensor=input_tensor,weights='imagenet', include_top=False)
 print('Model loaded.')
 
-plot_model(model, show_shapes=True, to_file='./images/model.png')
-Image("./images/model.png")
+# plot_model(model, show_shapes=True, to_file='./images/model.png')
+# Image("./images/model.png")
 
 # get the symbolic outputs of each "key" layer (we gave them unique names).
 outputs_dict = dict([(layer.name, layer.output) for layer in model.layers])
 
-for l, layer in enumerate(model.layers):
-    print(layer.name)
+# for l, layer in enumerate(model.layers):
+#     print(layer.name)
 
 # compute the neural style loss
 # first we need to define 4 utility functions
@@ -251,7 +248,7 @@ evaluator = Evaluator()
 # so as to minimize the neural style loss
 x = preprocess_image(base_image_path)
 
-result_prefix ='./images/results_'
+result_prefix ='./test-images/results_'
 
 for i in range(iterations):
     print('Start of iteration', i)
