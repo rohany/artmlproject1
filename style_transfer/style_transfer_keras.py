@@ -10,8 +10,12 @@ from keras.preprocessing.image import load_img, img_to_array
 from scipy.misc import imsave #to be able to save as an image
 from scipy.optimize import fmin_l_bfgs_b #to optimize our cost function
 
-from keras.applications import vgg19 #to load vgg19 network
 from keras import backend as K
+
+# K.set_learning_phase(0)
+
+from keras.applications import vgg19 #to load vgg19 network
+from keras.applications import inception_v3
 
 import keras
 
@@ -27,9 +31,9 @@ iterations = 20 #we will run 20 iterations during the optiomization. each iterat
 
 # these are the weights of the different loss components
 total_variation_weight = 1.0 
-style_weight = 1.0 #the best number authors got from their trials 
+style_weight = 2.0 #the best number authors got from their trials 
 content_weight = 0.025 #the best number authors got from their trials 
-
+# content_weight = 0.03
 # let's load images
 
 base_image_path = './test-images/'+content_file_name
@@ -105,6 +109,7 @@ input_tensor = K.concatenate([base_image,
 # the model will be loaded with pre-trained ImageNet weights
 
 model = vgg19.VGG19(input_tensor=input_tensor,weights='imagenet', include_top=False)
+# model = inception_v3.InceptionV3(include_top=False, input_tensor=input_tensor, weights='imagenet')
 print('Model loaded.')
 
 # plot_model(model, show_shapes=True, to_file='./images/model.png')
@@ -170,6 +175,7 @@ def total_variation_loss(x):
 
 loss = K.variable(0.)
 layer_features = outputs_dict['block5_conv2'] #content features
+# layer_features = outputs_dict['conv2d_94']
 base_image_features = layer_features[0, :, :, :]
 combination_features = layer_features[2, :, :, :]
 loss += content_weight * content_loss(base_image_features,
@@ -179,6 +185,7 @@ loss += content_weight * content_loss(base_image_features,
 feature_layers = ['block1_conv1', 'block2_conv1',
                   'block3_conv1', 'block4_conv1',
                   'block5_conv1']
+# feature_layers = ['conv2d_13', 'conv2d_33', 'conv2d_65', 'conv2d_71','conv2d_88']
 
 for layer_name in feature_layers:
     layer_features = outputs_dict[layer_name]
