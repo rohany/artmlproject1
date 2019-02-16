@@ -1,0 +1,4 @@
+The code we used to generate these images is in deepdream/ and style_transfer/.
+
+You can run the code by just calling python <filename> on the code files in the appropriate
+folders.
