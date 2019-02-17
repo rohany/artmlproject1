@@ -1,0 +1,1 @@
+The default settings have content weighted at 0.025. I also include the results with 10x more conten weight at 0.25 and 10x less content weight at 0.0025 in this folder. You can definitely see differences in the results, especially when you look at the eyes.
